@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="css/index-style.css">
+        <title>ToDo List</title>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="row">
+                <h1>ToDo List</h1>
+            </div>
+
+            <div class="row" id="form">
+                <div class="form-group">  
+                    <label class ="col-2" for="tache">Tâche</label>
+                    <input class ="col-7" type="text" class="form-control" id="tache" name="tache"/> 
+                    <button type="button" class="btn btn-dark col-2" id="creer">Créer</button>
+                </div> 
+            </div>
+
+            <div class="row pt-2">
+                <button type="button" class="btn btn-dark" id="aj">Ajouter</button>
+            </div>
+
+            <div class="row pt-2">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="">#</th>
+                            <th class="">Tâche</th>
+                            <th class="">OK</th>
+                            <th class="">Supr</th>
+                        </tr>
+                    </thead>
+                    <tbody id="list">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+        <script src="js/jqueryvalidation/jquery.validate.min.js"></script>
+        <script src="js/jqueryvalidation/localization/messages_fr.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdn.ckeditor.com/ckeditor5/1.0.0-alpha.2/classic/ckeditor.js"></script>
+
+        <script>
+            var liste = [];
+            function afficher(){
+                liste = (localStorage.getItem("liste")).split(',');
+                console.log(liste);
+                let ligne = '';
+                for(i=0;i<liste.length;i++)
+                {
+                    /*ligne += '<tr><td>' + (i+1) + '</td>    <td>' + liste[i] + '</td>   <td><button type="button" class="btn btn-success val" id="val-'+ i +'" value="'+ i +'">OK</button></td>   <td><button type="button" class="btn btn-danger sup" id="sup-'+ i +'" value="'+ i +'">X</button></td></tr>';*/
+                    
+                    // ecriture sur plusieurs lignes avec ``
+                    ligne += `<tr>
+                                <td>` +(i+1) + `</td>
+                                <td>` + liste[i] + `</td>
+                                <td><button type="button" class="btn btn-success val" id="val-`+ i +`" value="`+ i +`">OK</button></td>
+                                <td><button type="button" class="btn btn-danger sup" id="sup-`+ i +`" value="`+ i +`">X</button></td>
+                            </tr>`;
+                }
+                $('#list').append(ligne);
+            }
+
+            jQuery(document).ready(function(){
+                afficher();                
+                $('#aj').click(function(){
+                    $('#form').slideToggle();
+                });
+                
+                $('#creer').click(function(){
+                    var champ = $('#tache').val();
+                    liste.push(champ);
+                    localStorage.setItem('liste' , liste);
+                    afficher();                              
+                });
+                
+                $('body').on('click', '.val', function(){
+                    $(this).value();
+                });
+                
+                $('body').on('click', '.sup', function(){
+                    var valeur = $(this).value();
+                    console.log(valeur);
+                    liste = (localStorage.getItem("liste")).split(',');
+                    liste.splice(valeur);
+                    localStorage.setItem('liste' , liste);
+                    afficher();
+                });
+            });
+
+        </script>
+
+    </body>
+</html>
